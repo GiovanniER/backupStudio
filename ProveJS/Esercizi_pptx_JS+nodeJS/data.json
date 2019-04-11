@@ -1,0 +1,23 @@
+{
+    "name":"Giovanni",
+    "surname":"libralesso",
+    "age": 23,
+    "in_activity":true,
+
+    "name":"aaa",
+    "surname":"dd",
+    "age": 24,
+    "in_activity":false,
+
+
+    "name":"qqq",
+    "surname":"zzz",
+    "age": 25,
+    "in_activity":true,
+
+
+    "name":"wwww",
+    "surname":"ff",
+    "age": 6,
+    "in_activity":false
+}
