@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="refresh" content="100" >
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <title>Orologio</title>
+        <style>
+            #Clock{
+                font:bold 50pt sans;
+            }
+            #demo{
+                font:bold 50pt sans;
+            } 
+            #demo2{
+                font:bold 50pt sans;
+            }
+            #boxa{
+                width: 40px;
+                height: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="demo"></p>
+        <p id="demo2"></p>
+        <p id="Clock"></p>
+    <script>
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let giornino=new Date().getDate();
+        let mesino=new Date().getMonth();
+        let annino=new Date().getFullYear();
+        
+        let countDownDate = new Date(monthNames[mesino]+(giornino)+" "+annino+"  18:00:00").getTime();
+
+        let countDownDate2 = new Date(monthNames[mesino]+(giornino)+" "+annino+"  13:00:00").getTime();
+
+        let x = setInterval(function() {
+            let now = new Date().getTime();
+            let distance = countDownDate - now;
+            let distance2= countDownDate2 -now;
+
+            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            let days2 = Math.floor(distance2 / (1000 * 60 * 60 * 24));
+            let hours2 = Math.floor((distance2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes2 = Math.floor((distance2 % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds2 = Math.floor((distance2 % (1000 * 60)) / 1000);
+            if(hours2>=0){
+                document.getElementById("demo2").innerHTML = "lunch time in:  "+ hours2+ "h "+ minutes2 + "m " + seconds2 + "s ";
+            }else{
+                document.getElementById("demo2").innerHTML = "already lunched!";
+            }
+            
+            if(hours>=0){
+                document.getElementById("demo").innerHTML = "end of the day:  "+ hours + "h "+ minutes + "m " + seconds + "s ";
+            }else{
+                document.getElementById("demo2").innerHTML = "finish for today";
+            }
+            
+        }, 1000);
+
+        </script>
+        
+
+        <input id="boxa" type="checkbox" name="options" value="gift" onchange="gift=this.checked;">
+        <script>     
+            $(document).ready(function(){
+                $('input[type="checkbox"]').click(function(){
+                    if($(this).prop("checked") == true){
+                        alert("Checkbox is checked.");
+                    }
+                    else if($(this).prop("checked") == false){
+                        alert("Checkbox is unchecked.");
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            function displayTime(){
+                let elt=document.getElementById("Clock");
+                let now=new Date();
+                elt.innerHTML="Actual time  :"+now.toTimeString().substr(0,8);
+                setTimeout(displayTime,1000);
+            }
+            window.onload=displayTime;    
+        </script>
+
+        <script>
+            function factorial(n) {
+                if (n <= 1){
+                    return n;
+                }else{
+                    return n*factorial(n-1);
+                } 
+            }
+            document.write("<table>");
+            document.write("<tr><th>n</th><th>n!</th></tr>");
+            for(let i = 1; i <= 10; i++) {
+                document.write("<tr><td>" + i + "</td><td><center>"+factorial(i) + "</td></tr>");
+            }
+            document.write("</table>");
+
+            /*
+            do {
+            var name = prompt("What is your name?");
+            var correct = confirm("You entered '" + name + "'.\n")
+            }while(!correct);
+            alert("Hello, " + name);
+            
+
+            var w = window.open();
+            w.alert("About to visit http://example.com");
+            w.location = "http://example.com";*/
+
+        </script>
+
+<form name="myForm" method="get">
+    Name: <input type="text" name="fname">
+    <input type="submit" value="Submit">
+  </form>
+
+  
+    </body>
+</html>

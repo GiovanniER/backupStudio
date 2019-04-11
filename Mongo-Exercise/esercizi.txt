@@ -1,0 +1,409 @@
+Esercizio 1 : 
+
+
+"Inserire nella collection ‘test’ il nome, cognome, età di ogni persona qui presente."
+
+
+Non sapendo quale sia la soluzione ne metto 2 : 
+
+1)
+-> {
+    "_id" : ObjectId("5a11a4c13efb01d41f2e2b46"),
+    "object" : {
+        "user1" : {
+            "name" : "qqq",
+            "surname" : "www",
+            "age" : 20
+        },
+        "user2" : {
+            "name" : "aaa",
+            "surname" : "bbb",
+            "age" : 23
+        },
+        "user3" : {
+            "name" : "ggg",
+            "surname" : "hhhh",
+            "age" : 26
+        }
+    }
+}
+
+2)
+db.getCollection('test').insert({"nome":"Anna","cognome":"Molla","eta":15,"gender":"female","date":new Date()})
+db.getCollection('test').insert({"nome":"Marco","cognome":"asdas","eta":22,"gender":"male","date":new Date()})
+db.getCollection('test').insert({"nome":"giovanni","cognome":"libralesso","eta":33,"gender":"male","date":new Date()})
+
+
+Esercizio 2 : 
+
+"Recuperare tutti gli utenti di nome Andrea
+Recuperare l’utente di nome … (scelgo giovanni)
+Recuperare tutti gli utenti di età … (scelgo 23)
+Recuperare un documento per id"
+
+
+-> 
+a) db.getCollection('test').find({ "nome": "andrea" })
+b) db.getCollection('test').findOne({ "nome": "giovanni" })
+c) db.getCollection('test').find({"eta":23})
+d) db.getCollection('test').find({"_id":"user1"})
+
+
+
+Esercizio 3 : 
+
+a)
+"Sostituire il documento di un utente per _id cambiando il nome
+b)
+Aggiungere a tutti i documenti una nuova proprietà “gender” con valore 
+“male” se maschio, “female” se femmina
+c)
+Aggiungere a tutti i documenti il campo “date” contenente la data 
+di oggi (esempio “2017-11-24”) usando l’opzione multi 
+d)
+Modificare la data dell’esercizio precedente usando l’oggetto 
+Date di mongo: new Date() 
+e)
+Inserire un nuovo utente usando l’opzione upsert
+
+Nota: in questi esercizi abbiamo modificato lo schema della collezione 
+aggiungendo campi o modificando il tipo di dato
+
+->
+a) db.getCollection('test').update({"_id":"user2"},{$set:{"nome":"giovanni"}})
+b) 
+    db.getCollection('test').update({"nome":"marco"},{$set:{"gender":"male"}},{multi:"true"})
+    db.getCollection('test').update({"nome":"marco"},{$set:{"gender":"female"}},{multi:"true"})
+c)
+
+db.getCollection('test').update({},
+                          {$set : {"data":"2019-03-28"}},
+                          {upsert:false,
+                          multi:true}) 
+
+d)
+db.getCollection('test').update({},
+                          {$set : {"data":new Date()}},
+                          {upsert:false,
+                          multi:true}) 
+e)
+db.getCollection('test').update({"_id":"user10"},{"nome":"martina","cognome":"hillo","eta":30,"gender":"female",
+    "date":new Date()},{upsert:true,multi:false}) 
+
+Esercizio 4 : 
+
+
+"
+a) Rimuovere un solo utente con il vostro nome
+b) Rimuovere tutti gli utenti “male”
+c) Rimuovere tutti gli utenti “female”
+d) Rimuovere tutti i documenti della collezione con una sola operazione
+
+->
+a) db.getCollection('test').remove({"_id":"user10"},{"justOne":true})
+b) db.getCollection('test').remove({"gender":"male"},{"justOne":false})
+c) db.getCollection('test').remove({"gender":"female"},{"justOne":false})
+d) db.getCollection('test').remove({},{"justOne":false})
+
+
+Esercizio 5 : 
+
+
+Creare una nuova collezione “valutazioni”.
+Si vuole dare la possibilità di valutare e dare commenti ad altre persone. 
+Una valutazione è composta dai campi: 
+"from, to, vote, comment, creationDate, updateDate"
+
+Usare i metodi findOneAndUpdate & findOneAndDelete per:
+a)
+Inserire o aggiornare la valutazione di un utente
+b)
+Modificare il voto e il commento di una sola valutazione
+c)
+Usare $setOnInsert per unificare i punti precedenti
+d)
+Rimuovere tutte le valutazioni di un utente
+
+
+
+->
+
+a) 
+db.getCollection('valutazioni').findOneAndUpdate({"userID":"idMatteo"},{$set:{"from":"b"}})
+
+b)
+db.getCollection('valutazioni').findOneAndUpdate({"userID":"idMarco"},{$set:{"voto":"bravo","comment":"very bravo"}})
+
+c) 
+db.getCollection('valutazioni').findOneAndUpdate({"userID":"idBruno"},{$set:{"vote":"muybien"},$setOnInsert:{"from":"56","to":"23","comment":"ciao ciao","creationDate":new Date(),
+"updateDate":new Date()}},{upsert:true})
+
+d)
+db.getCollection('valutazioni').findOneAndDelete({"userID":"idAnna"})
+
+
+
+Esercizio 6 : 
+
+Nella collezione “users”:
+
+a) Inserire un documento per ogni persona qui presente contenente: nome, cognome, età, data di creazione
+b) Aggiungere il campo valutazioni con valore [ ]
+c) Dare ad ogni utente una valutazione aggiungendola al loro array.Una valutazione contiene questi campi: from, vote, message
+e) Trovare tutte le valutazioni inviate da una persona
+f) Trovare gli utenti che hanno un voto pari a 5
+
+
+a) db.getCollection('users').insert({"nome":"giuseppe","cognome":"davanti","eta":53,"creationDate":new Date()})
+b) db.getCollection('users').findOneAndUpdate({"nome":"giovanni"},{$set:{"valutazioni":[]}})
+c) db.getCollection('users').findOneAndUpdate({"nome":"pongo"},{$push:{"valutazioni":{"from":"me","vote":"ottimo","comment":"continua cosi"}}})
+e) db.getCollection('users').find({"valutazioni.from":"me"})
+f) db.getCollection('users').find({"valutazioni.vote":5})
+
+
+Esercizio 7 : 
+
+
+utilizzando i dati dell’esercizio precedente:
+a) trovare tutti gli utenti che hanno un voto > 4
+b) trovare gli utenti con nome diverso del vostro
+c) trovare gli utenti con voti >=2 e <4
+d) trovare gli utenti con voti 1,3,5
+e) trovare gli utenti con voti diversi da 1,3,5
+
+
+a) db.getCollection('users').find({"valutazioni.vote":{$gt:4}})
+b) db.getCollection('users').find({"nome":{$ne:"giovanni"}})
+c) db.getCollection('users').find({"valutazioni.vote":{$gte:2,$lte:6}})
+d) db.getCollection('users').find({"valutazioni.vote":{$eq:1,$eq:3,$eq:5}})
+e) db.getCollection('users').find({"valutazioni.vote":{$ne:1,$ne:3,$ne:5}})
+
+
+Esercizio 8 : 
+
+
+a) Seguendo la documentazione, ordinare le valutazioni in modo che per prime ci siano le valutazioni più alte. https://docs.mongodb.com/manual/reference/operator/update/sort/
+
+-> db.getCollection('users').find().sort({"valutazioni.vote":-1})
+
+b) Seguendo la documentazione, aggiungere un campo contenente il numero di volte in cui il documentato è stato modificato. https://docs.mongodb.com/manual/reference/operator/update/inc/
+
+-> db.getCollection('users').update({"nome": "giovanni"},{ $inc:{ countModifiche: 1 }})
+
+
+
+Esercizio 9:
+
+Si vuole creare un’applicazione che permetta di salvare e recuperare una lista di cose da fare. (Todo)
+
+Un Todo deve contenere un titolo unico, una descrizione opzionale, la data di creazione e un valore per indicare se l’attività è stata completata.
+
+Creare lo schema per questo tipo di dati
+Creare un Model
+
+
+
+-> 
+
+const schemaTodo = new mongoose.Schema({
+    titolo:{
+        type:String,
+        unique:true
+    },
+    descrizione:{
+        type:String,
+        required:false
+    },
+    dataCreazione:Date,
+    complete:Boolean
+});
+
+const Todo = mongoose.model('Todo',schemaTodo);
+
+Esercizio 10: 
+
+Utilizzando il modello Todo creato in precedenza per:
+
+Salvare nel database 5 nuove attività.
+Il titolo e la descrizione devono venire passati via riga di comando e letti con yargs
+Verificate che non vengano salvate due attività con lo stesso titolo
+
+
+->
+"const mongoose = require('mongoose');
+const args=require('yargs').argv;
+
+mongoose.connect('mongodb://localhost/ERAccademy',{useNewUrlParser:true});
+mongoose.set('userNewUrlParser',true);
+mongoose.set('useFindAndModify',false);
+mongoose.set('useCreateIndex',true);
+mongoose.set("debug",true);
+
+
+const schemaTodo = new mongoose.Schema({
+    titolo:{
+        type:String,
+        unique:true
+    },
+    descrizione:{
+        type:String,
+        required:false
+    },
+    dataCreazione:Date,
+    complete:Boolean
+},{versionKey:false});
+
+
+const Todo = mongoose.model('Todo',schemaTodo);
+
+const cosedafare=new Todo({titolo:args.titolo,descrizione:args.descrizione,dataCreazione:new Date(),complete:true});
+
+cosedafare.save(function(error, result) {
+	console.log(error, result);
+});
+
+
+//remind : per passare gli argomenti da linea di comando devo fare : 
+
+node todo.js --titolo="prova" --descrizione="provayarg"
+
+
+Esercizio 11 : 
+
+
+a) Stampare sullo schermo la lista di tutti i todo.
+b) Stampare sullo schermo un todo dato un titolo.
+c) Dato i risultati precedenti, recuperare un todo dato un id. Notate che potete passare l’id come stringa e non come ObjectId
+
+
+->
+a) 
+Todo.find({}, function (err, todo) {
+    if (err) return handleError(err);
+    console.log(todo);
+});
+
+
+b) Todo.findOne({ 'titolo': 'prova' }, function (err, todo) {
+    if (err) return handleError(err);
+    console.log(todo);
+  });
+
+
+c)  Todo.findOne({ 'titolo': 'prova' }, function (err, todo) {
+    if (err) return handleError(err);
+    Todo.findById({'_id':todo._id}, function (err, todo) {
+        if (err) return handleError(err);
+        console.log(todo);
+    });
+});
+
+
+esercizio 12: 
+
+a) Usare uno dei metodi di aggiornamento per cambiare lo stato di una attività a completata. Passare come parametro il titolo dell'attività e il nuovo stato
+b) Stampare sullo schermo solo le attività non ancora completate
+
+->
+
+a) 
+Todo.update({titolo:args.titolo},{$set:{complete:args.complete}}, function (err, todo) {
+    if (err) return handleError(err);
+    console.log(todo);
+});
+
+dal terminale scrivo : node todo.js --titolo="lavoro3" --complete=true
+
+b) 
+Todo.find({complete:false}, function (err, todo) {
+    if (err) return handleError(err);
+    console.log(todo);
+});
+
+
+Esercizio 13 : 
+
+a) Rimuovere un’attività tramite id.
+b) Rimuovere tutto.
+
+->
+
+a) 
+Todo.findOne({ 'titolo': 'lavoro' }, function (err, todo) {
+    if (err) return handleError(err);
+        Todo.remove({'_id':todo._id}, function (err, todo) {
+        if (err) return handleError(err);
+        console.log(todo);
+    });
+});
+
+b)
+Todo.remove({}, function (err, todo) {
+    if (err) return handleError(err);
+    console.log(todo);
+});
+
+
+/*Attenzione che i metodi di update e di remove sono in deprecationWarning, dovrei usare updateOne,deleteOne o la sua modifica updateMany,deleteMany*/
+
+
+Esercizio 14: 
+
+Creare il modello User:
+deve avere le proprietà username, password, creationDate, lastUpdateDate e details.
+details è un subdocument che deve contenere le proprietà name, age ed address.
+username, password e name sono richiesti, username unico.
+
+
+
+->
+
+const mongoose = require('mongoose');
+const args=require('yargs').argv;
+
+mongoose.connect('mongodb://localhost/ERAccademy',{useNewUrlParser:true});
+mongoose.set('userNewUrlParser',true);
+mongoose.set('useFindAndModify',false);
+mongoose.set('useCreateIndex',true);
+mongoose.set("debug",true);
+
+const detailsSchema= new mongoose.Schema({
+        name:{
+            type:String,
+            required:true
+        },
+        age:Number,
+        address:String
+});
+
+const schemaUtenti = mongoose.Schema({
+    username:{
+        type:String,
+        unique:true,
+        required:true
+    },
+    password:{
+        type:String,
+        required:true
+    },
+    creationDate:Date,
+    lastUpdateDate:Date,
+    details:{
+        type:detailsSchema,
+        required:true
+    }
+},{versionKey:false});
+
+
+const utenti = mongoose.model('utenti',schemaUtenti);
+
+const provaUtente=new utenti({username:"giovanniLiba",password:"loliba","details.name":"aaa"});
+
+provaUtente.save(function(error, result) {
+	console.log(error, result);
+});
+
+
+esercizio 15 : 
+
+
